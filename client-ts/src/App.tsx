@@ -1,36 +1,61 @@
-import React, { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import elbrusLogo from './assets/elbrus.svg';
+import React, { useEffect, useState } from 'react';
+
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import HomePage from './Page/HomePage/HomePage';
+import NavBar from './Components/NavBar/NavBar';
+
+import type CurrentUser from './Types/AppTypes';
+
+import axiosInstance from '../services/axiosInstace';
+import LoginPage from './Page/LogRegLogout/LoginPage';
+import LogOutPage from './Page/LogRegLogout/LogOutPage';
+import RegistrationPage from './Page/LogRegLogout/RegistrationPage';
+import QuestionsPage from './Page/QuestionsPage/QuestionsPage';
+import QuotesPage from './Page/QuotesPage/QuotesPage';
+import ObjectWritingPage from './Page/ObjectWritingPage/ObjectWritingPage';
+import NotFoundPage from './Page/LogRegLogout/NotFoundPage';
+import NotePage from './Page/NotePage/NotePage';
 
 function App(): JSX.Element {
-  const [count, setCount] = useState(0);
+  // const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(undefined);
+  const [currentUser, setCurrentUser] = useState<number>(123);
+
+  // async function getCurrentUser(): void {
+  //   try {
+  //     const { data } AxiosResponse = await axiosInstance.get('/refresh/tokens');
+
+  //     setCurrentUser(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
+  useEffect(() => {
+    // getCurrentUser();
+  }, []);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://github.com/Elbrus-Bootcamp" target="_blank" rel="noreferrer">
-          <img src={elbrusLogo} className="logo elbrus" alt="Elbrus logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h2>Elbrus Bootcamp</h2>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((prev) => prev + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </div>
+    <BrowserRouter>
+      <NavBar currentUser={currentUser} />
+
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+
+        <Route path="/notes" element={<NotePage />} />
+
+        <Route path="/questions" element={<QuestionsPage />} />
+
+        <Route path="/quotes" element={<QuotesPage />} />
+
+        <Route path="/objectwriting" element={<ObjectWritingPage />} />
+
+        <Route path="/auth/logout" element={<LogOutPage />} />
+        <Route path="/auth/login" element={<LoginPage />} />
+        <Route path="/auth/reg" element={<RegistrationPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
