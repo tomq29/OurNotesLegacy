@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiAxiosInstance from '../../../service/apiAxiosInstance';
+import convertMiliseconds from '../../../service/formatTime';
 
 function NoteCard({ note, getNotes, currentUser }) {
   const navigate = useNavigate();
@@ -36,6 +37,9 @@ function NoteCard({ note, getNotes, currentUser }) {
     }
   }
 
+  const dateNow = new Date();
+  const lastUp = new Date(note.updatedAt);
+
   return (
     <>
       <div className="card w-50 m-3">
@@ -57,7 +61,7 @@ function NoteCard({ note, getNotes, currentUser }) {
                 type="text"
                 defaultValue={note.description}
                 onChange={({ target }) =>
-                  setNewNote((prev) => ({ ...prev, title: target.value }))
+                  setNewNote((prev) => ({ ...prev, description: target.value }))
                 }
               />
             </>
@@ -70,7 +74,7 @@ function NoteCard({ note, getNotes, currentUser }) {
 
           <p className="card-text">
             <small className="text-body-secondary">
-              Last updated 3 mins ago
+              Last updated {convertMiliseconds(dateNow - lastUp, 'm')} mins ago
             </small>
           </p>
 
