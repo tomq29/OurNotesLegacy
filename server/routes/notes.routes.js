@@ -17,9 +17,9 @@ notesRouter
 
   .get(async (req, res) => {
     try {
-      const data = await Note.findAll({ order: [['id', 'ASC']] });
+      const notes = await Note.findAll({ order: [['id', 'ASC']] });
 
-      res.json(data);
+      res.status(200).json(notes);
     } catch ({ message }) {
       res.status(500).json({ err: message });
     }
