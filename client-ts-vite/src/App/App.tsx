@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AppRouter from './router/AppRouter';
 import { User } from '../Entities/User/type/UserType';
 import NavBar from '../Widgets/NavBar/NavBar';
+import { AppContext } from './providers/contextProvider';
 
 function App(): JSX.Element {
   const [currentUser, setCurrentUser] = useState<User | undefined>({
@@ -13,9 +14,13 @@ function App(): JSX.Element {
 
   return (
     <>
+    <AppContext.Provider value={  {    }  }   ></AppContext.Provider>
+
       <NavBar currentUser={currentUser} />
 
       <AppRouter />
+
+
     </>
   );
 }
