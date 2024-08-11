@@ -6,13 +6,13 @@ type stateContext = {
   notes: Note[];
   setNotes: Dispatch<React.SetStateAction<Note[]>>;
 
-  note: {};
+  note: Note;
   setNote: Dispatch<React.SetStateAction<Note>>;
 
   texts: Text[];
   setTexts: Dispatch<React.SetStateAction<Text[]>>;
 
-  text: {};
+  text: Text;
   setText: Dispatch<React.SetStateAction<Text>>;
 };
 
@@ -20,7 +20,7 @@ const initState: stateContext = {
   notes: [],
   setNotes: () => {},
 
-  note: {},
+  note: {id:0,description:'',title:},
   setNote: () => {},
 
   texts: [],
