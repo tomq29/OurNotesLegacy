@@ -10,9 +10,9 @@ const authRouter = require('express').Router();
 
 authRouter.post('/reg', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { login, email, password, colorID } = req.body;
 
-    if (name.trim() === '' || email.trim() === '' || password.trim() === '') {
+    if (login.trim() === '' || email.trim() === '' || password.trim() === '') {
       return res.status(400).json({ message: 'incorrect values' });
     }
 
@@ -24,9 +24,10 @@ authRouter.post('/reg', async (req, res) => {
 
     const user = (
       await User.create({
-        name,
+        login,
         email,
         password: await bcrypt.hash(password, 10),
+        colorID
       })
     ).get();
 

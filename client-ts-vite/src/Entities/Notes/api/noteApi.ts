@@ -1,11 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
 import { Note } from '../type/NoteType';
 
-export const noteRequest = axios.create({
-  baseURL: '/api/notes',
-});
+import axiosInstance from '../../../../services/axiosInstace'
+
+
+// export const noteRequest = axios.create({
+//   baseURL: '/api/notes',
+// });
+
+
 
 export const getAllNotes = async (): Promise<Note[]> => {
-  const { data }: AxiosResponse<Note[]> = await noteRequest.get('/');
+  const { data }: AxiosResponse<Note[]> = await axiosInstance.get('/notes');
   return data;
 };

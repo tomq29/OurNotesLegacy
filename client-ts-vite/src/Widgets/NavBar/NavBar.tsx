@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { User } from '../../Entities/User/type/UserType';
 import { NavLink } from 'react-router-dom';
+import { AppContext } from '../../App/providers/contextProvider';
 
-type NavBarProps = {
-  currentUser: User | undefined;
-};
+function NavBar(): JSX.Element {
+  const { currentUser } = useContext(AppContext);
 
-function NavBar({ currentUser }: NavBarProps): JSX.Element {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary mb-3">
       <div className="container-fluid">

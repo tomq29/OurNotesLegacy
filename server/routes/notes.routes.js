@@ -33,7 +33,9 @@ notesRouter
         res.status(400).json('Empty field exists');
       }
 
-      const data = await Note.create({ title, description, userID, folderID });
+      const data = (
+        await Note.create({ title, description, userID, folderID })
+      ).get();
 
       res.json(data);
     } catch ({ message }) {

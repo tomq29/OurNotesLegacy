@@ -1,125 +1,174 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch, useContext, useState } from 'react';
 import { Note, NoteID } from '../type/NoteType';
 import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../../App/providers/contextProvider';
+import axiosInstance from '../../../../services/axiosInstace';
 
 type NoteCardProps = {
-    key: NoteID
+  key: NoteID;
   note: Note;
-  setNotes: Dispatch<React.SetStateAction<Note[]>>
 };
 
-function NoteCard({ note, setNotes }: NoteCardProps): JSX.Element {
+function NoteCard({ note }: NoteCardProps): JSX.Element {
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [deleteMode, setDeleteMode] = useState<boolean>(false);
+  const [normalMode, setNormalMode] = useState<boolean>(true);
 
-  const navigate = useNavigate()
+  const { setNotes } = useContext(AppContext);
+
+  const [newNote, setNewNote] = useState<Note>({
+    id: note.id,
+    description: note.description,
+    title: note.title,
+    folderID: note.folderID,
+    userID: note.userID,
+  });
+
+  const navigate = useNavigate();
+
+  async function editNote() {
+    try {
+      const { data } = await axiosInstance.put(
+        `/notes/note/${note.id}`,
+        newNote
+      );
+
+      if (data) {
+        setNotes((prev) =>
+          prev.map((prevNote) => {
+            if (prevNote.id === note.id) {
+              return { ...prevNote, ...newNote };
+            } else {
+              return prevNote;
+            }
+          })
+        );
+      }
+
+      setEditMode((prev) => !prev);
+      setNormalMode((prev) => !prev);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function deleteNote() {
+    try {
+      const { data } = await axiosInstance.delete(`/notes/note/${note.id}`);
+
+      if (data) {
+        setNotes((prev) => prev.filter((prevNote) => prevNote.id !== note.id));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
-    <div className="card w-50 m-3">
+    <div className="card m-3">
       <div className="card-body">
-        {/*  */}
-        <>
-          <h5 className="card-title">{note.title}</h5>
-          <p className="card-text">{note.description}</p>
-        </>
+        {(normalMode || deleteMode) && (
+          <>
+            <h5 className="card-title">{note.title}</h5>
+            <p className="card-text">{note.description}</p>
+          </>
+        )}
 
-        {/* {editMode ? (
-        <>
-          <input
-            className="card-title "
-            type="text"
-            defaultValue={note.title}
-            onChange={({ target }) =>
-              setNewNote((prev) => ({ ...prev, title: target.value }))
-            }
-          />
+        {editMode && (
+          <>
+            <input
+              className="card-title h6 form-control"
+              type="text"
+              defaultValue={note.title}
+              onChange={({ target }) =>
+                setNewNote((prev) => ({ ...prev, title: target.value }))
+              }
+            />
 
-          <p className="card-text"></p>
-          <input
-            className="card-text"
-            type="text"
-            defaultValue={note.description}
-            onChange={({ target }) =>
-              setNewNote((prev) => ({ ...prev, description: target.value }))
-            }
-          />
-        </>
-      ) : (
-        <>
-          <h5 className="card-title">{note.title}</h5>
-          <p className="card-text">{note.description}</p>
-        </>
-      )} */}
+            <p className="card-text"></p>
+            <textarea
+              className="card-text form-control p "
+              defaultValue={note.description}
+              rows={3} // Adjust the number of rows for height
+              onChange={({ target }) =>
+                setNewNote((prev) => ({ ...prev, description: target.value }))
+              }
+            />
+          </>
+        )}
 
-        {/*  */}
-        {/*  */}
         <p className="card-text">
           <small className="text-body-secondary">Last updated 3 mins ago</small>
         </p>
 
-        {/*  */}
-        <>
-          <button
-            className="btn btn-primary round m-1"
-            onClick={() => {
-              navigate(`/note/${note.id}`);
-            }}
-          >
-            Перейти
-          </button>
+        {normalMode && (
+          <>
+            <button
+              className="btn btn-primary round m-1"
+              onClick={() => {
+                navigate(`/note/${note.id}`);
+              }}
+            >
+              Перейти
+            </button>
 
-          <button
-            className="btn btn-secondary round m-1"
-            onClick={() => setEditMode((prev) => !prev)}
-          >
-            Изменить
-          </button>
+            <button
+              className="btn btn-secondary round m-1"
+              onClick={() => {
+                setEditMode((prev) => !prev);
+                setNormalMode((prev) => !prev);
+              }}
+            >
+              Изменить
+            </button>
 
-          <button className="btn btn-danger round m-1"
-        //    onClick={deleteNote}
-           >
-            Удалить
-          </button>
-        </>
-        {/*  */}
-        {/*  */}
-        {/* {editMode ? (
-        <>
-          <button className="btn btn-success round m-1" onClick={editNote}>
-            Изменить
-          </button>
+            <button
+              className="btn btn-danger round m-1"
+              onClick={() => {
+                setDeleteMode((prev) => !prev);
+                setNormalMode((prev) => !prev);
+              }}
+            >
+              Удалить
+            </button>
+          </>
+        )}
 
-          <button
-            className="btn btn-secondary round m-1"
-            onClick={() => setEditMode((prev) => !prev)}
-          >
-            Отменить
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            className="btn btn-primary round m-1"
-            onClick={() => {
-              navigate(`/note/${note.id}`);
-            }}
-          >
-            Перейти
-          </button>
+        {editMode && (
+          <>
+            <button className="btn btn-success round m-1" onClick={editNote}>
+              Изменить
+            </button>
 
-          <button
-            className="btn btn-secondary round m-1"
-            onClick={() => setEditMode((prev) => !prev)}
-          >
-            Изменить
-          </button>
+            <button
+              className="btn btn-secondary round m-1"
+              onClick={() => {
+                setEditMode((prev) => !prev);
+                setNormalMode((prev) => !prev);
+              }}
+            >
+              Отменить
+            </button>
+          </>
+        )}
 
-          <button className="btn btn-danger round m-1" onClick={deleteNote}>
-            Удалить
-          </button>
-        </>
-      )} */}
+        {deleteMode && (
+          <>
+            <button className="btn btn-danger round m-1" onClick={deleteNote}>
+              Удалить
+            </button>
 
-        {/*  */}
+            <button
+              className="btn btn-secondary round m-1"
+              onClick={() => {
+                setDeleteMode((prev) => !prev);
+                setNormalMode((prev) => !prev);
+              }}
+            >
+              Отменить
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import LoginPage from '../../Pages/LogRegLogout/LoginPage';
 import RegistrationPage from '../../Pages/LogRegLogout/RegistrationPage';
 import NotFoundPage from '../../Pages/LogRegLogout/NotFoundPage';
 import NotesPage from '../../Pages/NotesPage/NotesPage';
+import OneNotePage from '../../Pages/OneNotePage/OneNotePage';
 
 function AppRouter(): JSX.Element {
   return (
@@ -17,6 +18,7 @@ function AppRouter(): JSX.Element {
         <Route path="/" element={<HomePage />} />
 
         <Route path="/notes" element={<NotesPage />} />
+        <Route path="/note/:id" element={<OneNotePage />} />
 
         <Route path="/questions" element={<QuestionsPage />} />
 

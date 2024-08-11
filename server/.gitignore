@@ -129,5 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
-server/db/config/database.json
+#config DB
+db/config/database.json
