@@ -8,7 +8,7 @@ type stateContext = {
   setNotes: Dispatch<React.SetStateAction<Note[]>>;
 
   oneNote: Note;
-  setOneNote: Dispatch<React.SetStateAction<Note>>;
+  setOneNote: Dispatch<React.SetStateAction<Note>> | Promise<Note>;
 
   texts: Text[];
   setTexts: Dispatch<React.SetStateAction<Text[]>>;

@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 type CreateNote = Omit<Note, 'id' | 'folderID'>;
 
 function AddNewCard(): JSX.Element {
-  //use Omit
+
 
   const { setAddMode, setNotes, currentUser } = useContext(AppContext);
 
