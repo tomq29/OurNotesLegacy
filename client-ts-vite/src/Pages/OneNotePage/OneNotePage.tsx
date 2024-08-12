@@ -18,10 +18,11 @@ function OneNotePage(): JSX.Element {
         setLoading(false);
       })
       .catch(console.log);
+    return setLoading(true);
   }, []);
 
   if (loading) {
-    return <Spinner/>;
+    return <Spinner />;
   }
 
   return (
@@ -32,10 +33,6 @@ function OneNotePage(): JSX.Element {
       {oneNote.Texts.map((text) => (
         <TextBlock key={text.id} text={text} />
       ))}
-
-
-      
-    
     </div>
   );
 }

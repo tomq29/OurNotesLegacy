@@ -10,22 +10,32 @@ import Spinner from '../../Shared/LoadingSpinner/Spinner';
 function NotesPage(): JSX.Element {
   // const [addMode, setAddMode] = useState<boolean>(false);
 
-  const { notes, setNotes, addMode, setAddMode, loading, setLoading } =
-    useContext(AppContext);
-
-  
+  const {
+    notes,
+    setNotes,
+    addMode,
+    setAddMode,
+    loading,
+    setLoading,
+    state,
+    dispatch,
+  } = useContext(AppContext);
 
   useEffect(() => {
     getAllNotes()
       .then((data) => {
-        setNotes(data);
+        dispatch({type:'getAll', payload:data})
+        // setNotes(data);
         setLoading(false);
       })
       .catch(console.log);
+
+
+    return setLoading(true);
   }, []);
 
   if (loading) {
-    return <Spinner/>
+    return <Spinner />;
   }
   return (
     <div>
@@ -48,7 +58,7 @@ function NotesPage(): JSX.Element {
       )}
 
       <div className="container d-flex flex-wrap">
-        {notes.map((note) => (
+        {state.map((note) => (
           <NoteCard key={note.id} note={note} />
         ))}
       </div>

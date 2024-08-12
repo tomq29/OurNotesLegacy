@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import AppRouter from './router/AppRouter';
 import { User } from '../Entities/User/type/UserType';
 import NavBar from '../Widgets/NavBar/NavBar';
@@ -6,6 +6,7 @@ import { AppContext } from './providers/contextProvider';
 import { Text } from '../Entities/Texts/type/TextType';
 import { Note, NoteWithTexts } from '../Entities/Notes/type/NoteType';
 import axiosInstance, { setAccessToken } from '../../services/axiosInstace';
+import { initState, reducer } from './store/appReducer';
 
 function App(): JSX.Element {
   // const [currentUser, setCurrentUser] = useState<User | undefined>({
@@ -14,6 +15,8 @@ function App(): JSX.Element {
   //   email: 'tom@tom',
   //   colorID: 1,
   // });
+
+  const [state, dispatch] = useReducer(reducer, initState);
 
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 
@@ -63,6 +66,8 @@ function App(): JSX.Element {
           setAddMode,
           loading,
           setLoading,
+          state,
+          dispatch,
         }}
       >
         <NavBar />

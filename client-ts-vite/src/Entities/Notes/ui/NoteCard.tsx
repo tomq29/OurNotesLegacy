@@ -14,7 +14,7 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
   const [deleteMode, setDeleteMode] = useState<boolean>(false);
   const [normalMode, setNormalMode] = useState<boolean>(true);
 
-  const { setNotes } = useContext(AppContext);
+  const { setNotes, dispatch } = useContext(AppContext);
 
   const [newNote, setNewNote] = useState<Note>({
     id: note.id,
@@ -34,15 +34,17 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
       );
 
       if (data) {
-        setNotes((prev) =>
-          prev.map((prevNote) => {
-            if (prevNote.id === note.id) {
-              return { ...prevNote, ...newNote };
-            } else {
-              return prevNote;
-            }
-          })
-        );
+        dispatch({ type: 'update', payload: newNote });
+
+        // setNotes((prev) =>
+        //   prev.map((prevNote) => {
+        //     if (prevNote.id === note.id) {
+        //       return { ...prevNote, ...newNote };
+        //     } else {
+        //       return prevNote;
+        //     }
+        //   })
+        // );
       }
 
       setEditMode((prev) => !prev);
@@ -57,7 +59,8 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
       const { data } = await axiosInstance.delete(`/notes/note/${note.id}`);
 
       if (data) {
-        setNotes((prev) => prev.filter((prevNote) => prevNote.id !== note.id));
+        dispatch({ type: 'delete', payload: note.id });
+        // setNotes((prev) => prev.filter((prevNote) => prevNote.id !== note.id));
       }
     } catch (error) {
       console.error(error);
@@ -89,7 +92,7 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
             <textarea
               className="card-text form-control p "
               defaultValue={note.description}
-              rows={3} // Adjust the number of rows for height
+              rows={3}
               onChange={({ target }) =>
                 setNewNote((prev) => ({ ...prev, description: target.value }))
               }

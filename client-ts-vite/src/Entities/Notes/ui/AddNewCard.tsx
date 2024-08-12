@@ -7,14 +7,13 @@ import { AxiosResponse } from 'axios';
 type CreateNote = Omit<Note, 'id' | 'folderID'>;
 
 function AddNewCard(): JSX.Element {
-
-
-  const { setAddMode, setNotes, currentUser } = useContext(AppContext);
+  const { setAddMode, setNotes, currentUser, state, dispatch } =
+    useContext(AppContext);
 
   const [newNote, setNewNote] = useState<CreateNote>({
     description: '',
     title: '',
-    userID: currentUser?.id 
+    userID: currentUser?.id,
   });
 
   async function addNewNote(event: React.FormEvent<HTMLFormElement>) {
@@ -24,8 +23,9 @@ function AddNewCard(): JSX.Element {
         '/notes/',
         newNote
       );
-      setNotes((prev) => [...prev, data]);
-      setAddMode((prev) => !prev)
+      // setNotes((prev) => [...prev, data]);
+      dispatch({ type: 'addNew', payload: data });
+      setAddMode((prev) => !prev);
     } catch (error) {
       console.error(error);
     }

@@ -51,12 +51,12 @@ notesRouter
       const { id } = req.params;
       const { title, description, folderID, userID } = req.body;
 
-      const data = await Note.update(
+      const [updateStatus] = await Note.update(
         { title, description, folderID, userID },
         { where: { id } }
       );
 
-      res.json(data);
+      res.json({ updateStatus, id });
     } catch ({ message }) {
       res.status(500).json({ err: message });
     }
@@ -68,7 +68,7 @@ notesRouter
 
       const countDeletedNotes = await Note.destroy({ where: { id } });
 
-      res.json({ countDeletedNotes });
+      res.json({ countDeletedNotes, id });
     } catch ({ message }) {
       res.status(500).json({ err: message });
     }
