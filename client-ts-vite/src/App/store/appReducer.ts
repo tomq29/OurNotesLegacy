@@ -1,34 +1,60 @@
-import { Note } from '../../Entities/Notes/type/NoteType';
+import { Note, NoteWithTexts } from '../../Entities/Notes/type/NoteType';
 
-type InitStateType = Note[];
+export type InitStateType = {
+  notes: Note[];
+  oneNote: NoteWithTexts;
+};
 
-export const initState: InitStateType = [];
+export const initState: InitStateType = {
+  notes: [],
+  oneNote: {
+    id: 0,
+    description: '',
+    title: '',
+    folderID: null,
+    userID: 0,
+    Texts: [],
+  },
+};
 
 export type ActionType =
   | { type: 'addNew'; payload: Note }
   | { type: 'delete'; payload: number }
   | { type: 'getAll'; payload: Note[] }
+  | { type: 'getOne'; payload: NoteWithTexts }
   | { type: 'update'; payload: Note };
 
-export function reducer(state: InitStateType,action: ActionType): InitStateType {
-  
+export function reducer(
+  state: InitStateType,
+  action: ActionType
+): InitStateType {
   switch (action.type) {
     case 'addNew':
-      return [...state, action.payload];
+      return { ...state, notes: [...state.notes, action.payload] };
 
     case 'delete':
-      return state.filter((el) => el.id !== action.payload);
+      return {
+        ...state,
+        notes: state.notes.filter((el) => el.id !== action.payload),
+      };
+
     case 'getAll':
-      return action.payload;
+      return { ...state, notes: action.payload };
+
+    case 'getOne':
+      return { ...state, oneNote: action.payload };
 
     case 'update':
-      return state.map((el) => {
-        if (el.id === action.payload.id) {
-          return { ...el, ...action.payload };
-        } else {
-          return el;
-        }
-      });
+      return {
+        ...state,
+        notes: state.notes.map((el) => {
+          if (el.id === action.payload.id) {
+            return { ...el, ...action.payload };
+          } else {
+            return el;
+          }
+        }),
+      };
 
     default:
       return state;

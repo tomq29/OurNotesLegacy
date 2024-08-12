@@ -19,7 +19,7 @@ textRouter
       const { body, noteID, userID } = req.body;
 
       if (body.trim() === '' || !userID || !noteID) {
-        res.status(400).json('Empty field exists');
+       return res.status(400).json('Empty field exists');
       }
       const data = await Text.create({ body, noteID, userID });
 

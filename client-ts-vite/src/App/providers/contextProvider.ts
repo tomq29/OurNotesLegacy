@@ -2,7 +2,7 @@ import { createContext, Dispatch } from 'react';
 import { Note, NoteWithTexts } from '../../Entities/Notes/type/NoteType';
 import { Text } from '../../Entities/Texts/type/TextType';
 import { User } from '../../Entities/User/type/UserType';
-import { ActionType } from '../store/appReducer';
+import { ActionType, InitStateType } from '../store/appReducer';
 
 type stateContext = {
   notes: Note[];
@@ -26,7 +26,7 @@ type stateContext = {
   loading: boolean;
   setLoading: Dispatch<React.SetStateAction<boolean>>;
 
-  state: Note[];
+  state: InitStateType;
   dispatch: React.Dispatch<ActionType>;
 };
 
@@ -60,7 +60,7 @@ const initState: stateContext = {
   loading: true,
   setLoading: () => {},
 
-  state: [],
+  state: {},
   dispatch: () => {},
 };
 

@@ -8,7 +8,6 @@ import AddNewCard from '../../Entities/Notes/ui/AddNewCard';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';
 
 function NotesPage(): JSX.Element {
-  // const [addMode, setAddMode] = useState<boolean>(false);
 
   const {
     notes,
@@ -58,7 +57,7 @@ function NotesPage(): JSX.Element {
       )}
 
       <div className="container d-flex flex-wrap">
-        {state.map((note) => (
+        {state.notes.map((note) => (
           <NoteCard key={note.id} note={note} />
         ))}
       </div>

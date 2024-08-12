@@ -21,7 +21,7 @@ folderRouter
       const { name, purpose, userID } = req.body;
 
       if (name.trim() === '' || purpose.trim() === '') {
-        res.status(400).json('Empty field exists');
+       return res.status(400).json('Empty field exists');
       }
       const data = await Folder.create({ name, purpose, userID });
 
