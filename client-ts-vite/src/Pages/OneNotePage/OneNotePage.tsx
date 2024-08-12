@@ -2,29 +2,19 @@ import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AppContext } from '../../App/providers/contextProvider';
 import { getOneNote } from '../../Entities/Notes/api/noteApi';
+import TextBlock from '../../Entities/Texts/ui/TextBlock';
 
 function OneNotePage(): JSX.Element {
   const { id } = useParams();
 
-  const { notes, oneNote, setOneNote, loading, setLoading } =
-    useContext(AppContext);
-
-  // if (id) {
-  //   const [note] = notes.filter((el) => el.id === +id);
-  //   setOneNote(note);
-  // }
+  const { oneNote, setOneNote, loading, setLoading } = useContext(AppContext);
 
   useEffect(() => {
-
-    
     getOneNote(Number(id))
       .then((data) => {
-        
         setOneNote(data);
-        console.log(oneNote);
-        
+
         setLoading(false);
-        
       })
       .catch(console.log);
   }, []);
@@ -34,14 +24,17 @@ function OneNotePage(): JSX.Element {
   }
 
   return (
-    <div>
-      <>
-        <h5 className="card-title">{oneNote.title}</h5>
-        <p className="card-text">{oneNote.description}</p>
+    <div className="container">
+      <h5 className="text-center h1">Название: {oneNote.title}</h5>
+      <p className="text-center h4">Описание: {oneNote.description}</p>
 
-        {/* <div contentEditable> Измени меня</div> */}
-        {/* <div contentEditable> Измени меня2</div> */}
-      </>
+      {oneNote.Texts.map((text) => (
+        <TextBlock key={text.id} text={text} />
+      ))}
+
+
+      
+    
     </div>
   );
 }

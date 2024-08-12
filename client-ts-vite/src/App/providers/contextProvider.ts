@@ -1,5 +1,5 @@
 import { createContext, Dispatch } from 'react';
-import { Note } from '../../Entities/Notes/type/NoteType';
+import { Note, NoteWithTexts } from '../../Entities/Notes/type/NoteType';
 import { Text } from '../../Entities/Texts/type/TextType';
 import { User } from '../../Entities/User/type/UserType';
 
@@ -7,8 +7,8 @@ type stateContext = {
   notes: Note[];
   setNotes: Dispatch<React.SetStateAction<Note[]>>;
 
-  oneNote: Note;
-  setOneNote: Dispatch<React.SetStateAction<Note>> | Promise<Note>;
+  oneNote: NoteWithTexts;
+  setOneNote: Dispatch<React.SetStateAction<NoteWithTexts>>
 
   texts: Text[];
   setTexts: Dispatch<React.SetStateAction<Text[]>>;
@@ -30,7 +30,7 @@ const initState: stateContext = {
   notes: [],
   setNotes: () => {},
 
-  oneNote: { id: 0, description: '', title: '', folderID: null, userID: 0 },
+  oneNote: { id: 0, description: '', title: '', folderID: null, userID: 0, Texts:[] },
   setOneNote: () => {},
 
   texts: [],

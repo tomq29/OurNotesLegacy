@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { Note, NoteID, NoteWithTexts } from '../type/NoteType';
 
 import axiosInstance from '../../../../services/axiosInstace';

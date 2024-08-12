@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function AuthorizationPage({ setCurrentUser }) {
   const [error, setError] = useState(false);
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

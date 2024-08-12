@@ -26,7 +26,7 @@ const axiosInstance: AxiosInstance = axios.create({
 
 let accessToken = '';
 
-function setAccessToken(token) {
+export function setAccessToken(token) {
   accessToken = token;
 }
 

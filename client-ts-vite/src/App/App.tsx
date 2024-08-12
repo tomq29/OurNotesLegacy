@@ -7,12 +7,15 @@ import { Text } from '../Entities/Texts/type/TextType';
 import { Note } from '../Entities/Notes/type/NoteType';
 
 function App(): JSX.Element {
-  const [currentUser, setCurrentUser] = useState<User | undefined>({
-    id: 1,
-    login: 'tom',
-    email: 'tom@tom',
-    colorID: 1,
-  });
+  // const [currentUser, setCurrentUser] = useState<User | undefined>({
+  //   id: 1,
+  //   login: 'tom',
+  //   email: 'tom@tom',
+  //   colorID: 1,
+  // });
+
+  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
+
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [texts, setTexts] = useState<Text[]>([]);

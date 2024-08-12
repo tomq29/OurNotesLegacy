@@ -80,14 +80,12 @@ notesRouter
   .get(async (req, res) => {
     try {
       const { id } = req.params;
-      const data = await Note.findAll({
+      const data = await Note.findOne({
         where: { id },
         include: { model: Text },
         // SORT BY CREATE DATE
       });
 
-      console.log(data);
-      
       res.json(data);
     } catch ({ message }) {
       res.status(500).json({ err: message });
