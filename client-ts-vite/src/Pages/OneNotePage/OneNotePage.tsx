@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { AppContext } from '../../App/providers/contextProvider';
 import { getOneNote } from '../../Entities/Notes/api/noteApi';
 import TextBlock from '../../Entities/Texts/ui/TextBlock';
+import Spinner from '../../Shared/LoadingSpinner/Spinner';
 
 function OneNotePage(): JSX.Element {
   const { id } = useParams();
@@ -20,7 +21,7 @@ function OneNotePage(): JSX.Element {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner/>;
   }
 
   return (
