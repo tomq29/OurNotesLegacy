@@ -1,16 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { Note, NoteID } from '../type/NoteType';
+import { NoteWithoutIDandFolderID } from '../type/NoteType';
 import { AppContext } from '../../../App/providers/contextProvider';
-import axiosInstance from '../../../../services/axiosInstace';
-import { AxiosResponse } from 'axios';
 
-type CreateNote = Omit<Note, 'id' | 'folderID'>;
+import NoteApi from '../api/noteApi';
 
 function AddNewCard(): JSX.Element {
-  const { setAddMode, setNotes, currentUser, state, dispatch } =
+  const { setAddMode, currentUser, dispatch } =
     useContext(AppContext);
 
-  const [newNote, setNewNote] = useState<CreateNote>({
+  const [newNote, setNewNote] = useState<NoteWithoutIDandFolderID>({
     description: '',
     title: '',
     userID: currentUser?.id,
@@ -19,11 +17,8 @@ function AddNewCard(): JSX.Element {
   async function addNewNote(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      const { data }: AxiosResponse<Note> = await axiosInstance.post(
-        '/notes/',
-        newNote
-      );
-      // setNotes((prev) => [...prev, data]);
+      const data = await NoteApi.createNote(newNote);
+
       dispatch({ type: 'addNew', payload: data });
       setAddMode((prev) => !prev);
     } catch (error) {

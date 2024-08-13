@@ -1,8 +1,9 @@
-import React, { Dispatch, useContext, useState } from 'react';
+import {  useContext, useState } from 'react';
 import { Note, NoteID } from '../type/NoteType';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../../App/providers/contextProvider';
-import axiosInstance from '../../../../services/axiosInstace';
+
+import NoteApi from '../api/noteApi';
 
 type NoteCardProps = {
   key: NoteID;
@@ -14,7 +15,7 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
   const [deleteMode, setDeleteMode] = useState<boolean>(false);
   const [normalMode, setNormalMode] = useState<boolean>(true);
 
-  const { setNotes, dispatch } = useContext(AppContext);
+  const {dispatch } = useContext(AppContext);
 
   const [newNote, setNewNote] = useState<Note>({
     id: note.id,
@@ -28,23 +29,10 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
 
   async function editNote() {
     try {
-      const { data } = await axiosInstance.put(
-        `/notes/note/${note.id}`,
-        newNote
-      );
+      const data = await NoteApi.updateNote(newNote);
 
       if (data) {
         dispatch({ type: 'update', payload: newNote });
-
-        // setNotes((prev) =>
-        //   prev.map((prevNote) => {
-        //     if (prevNote.id === note.id) {
-        //       return { ...prevNote, ...newNote };
-        //     } else {
-        //       return prevNote;
-        //     }
-        //   })
-        // );
       }
 
       setEditMode((prev) => !prev);
@@ -56,11 +44,10 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
 
   async function deleteNote() {
     try {
-      const { data } = await axiosInstance.delete(`/notes/note/${note.id}`);
+      const data = await NoteApi.deteleNote(note.id);
 
       if (data) {
         dispatch({ type: 'delete', payload: note.id });
-        // setNotes((prev) => prev.filter((prevNote) => prevNote.id !== note.id));
       }
     } catch (error) {
       console.error(error);

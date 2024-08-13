@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 
-import { getAllNotes } from '../../Entities/Notes/api/noteApi';
+import NoteApi from '../../Entities/Notes/api/noteApi';
 import NoteCard from '../../Entities/Notes/ui/NoteCard';
 import { AppContext } from '../../App/providers/contextProvider';
 
@@ -8,27 +8,17 @@ import AddNewCard from '../../Entities/Notes/ui/AddNewCard';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';
 
 function NotesPage(): JSX.Element {
-
-  const {
-    notes,
-    setNotes,
-    addMode,
-    setAddMode,
-    loading,
-    setLoading,
-    state,
-    dispatch,
-  } = useContext(AppContext);
+  const { addMode, setAddMode, loading, setLoading, state, dispatch } =
+    useContext(AppContext);
 
   useEffect(() => {
-    getAllNotes()
+    NoteApi.getAllNotes()
       .then((data) => {
-        dispatch({type:'getAll', payload:data})
+        dispatch({ type: 'getAll', payload: data });
         // setNotes(data);
         setLoading(false);
       })
       .catch(console.log);
-
 
     return setLoading(true);
   }, []);

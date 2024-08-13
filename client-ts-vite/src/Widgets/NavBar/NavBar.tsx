@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { User } from '../../Entities/User/type/UserType';
+import { useContext } from 'react';
+
 import { NavLink } from 'react-router-dom';
 import { AppContext } from '../../App/providers/contextProvider';
 

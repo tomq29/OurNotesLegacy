@@ -4,7 +4,7 @@ import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
 import { AppContext } from '../../App/providers/contextProvider';
 
 function RegistrationPage(): JSX.Element {
-  const { currentUser, setCurrentUser } = useContext(AppContext);
+  const { setCurrentUser } = useContext(AppContext);
 
   const [login, setLogin] = useState();
   const [email, setEmail] = useState();

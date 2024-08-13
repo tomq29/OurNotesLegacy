@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AppContext } from '../../App/providers/contextProvider';
-import { getOneNote } from '../../Entities/Notes/api/noteApi';
+import NoteApi from '../../Entities/Notes/api/noteApi';
 import TextBlock from '../../Entities/Texts/ui/TextBlock';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';
 import AddNewText from '../../Entities/Texts/ui/AddNewText';
@@ -9,13 +9,13 @@ import AddNewText from '../../Entities/Texts/ui/AddNewText';
 function OneNotePage(): JSX.Element {
   const { id } = useParams();
 
-  const { oneNote, setOneNote, loading, setLoading, state, dispatch } =
+  const { loading, setLoading, state, dispatch } =
     useContext(AppContext);
 
   useEffect(() => {
-    getOneNote(Number(id))
+    NoteApi.getOneNote(Number(id))
       .then((data) => {
-        // setOneNote(data);
+     
         dispatch({ type: 'getOne', payload: data });
         setLoading(false);
       })

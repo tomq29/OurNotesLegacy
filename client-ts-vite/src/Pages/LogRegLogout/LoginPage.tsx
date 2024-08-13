@@ -4,12 +4,10 @@ import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
 import { AppContext } from '../../App/providers/contextProvider';
 
 function LoginPage(): JSX.Element {
-  const [error, setError] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
-  const {setCurrentUser} = useContext(AppContext)
+  const { setCurrentUser } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -25,9 +23,7 @@ function LoginPage(): JSX.Element {
           console.log(data.message);
           navigate('/');
         })
-        .catch((err) => {
-          setError(err.response.data.message);
-        });
+        .catch(console.log);
     }
   };
 

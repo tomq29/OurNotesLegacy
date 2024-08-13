@@ -6,7 +6,7 @@ import { AppContext } from './providers/contextProvider';
 import { Text } from '../Entities/Texts/type/TextType';
 import { Note, NoteWithTexts } from '../Entities/Notes/type/NoteType';
 import axiosInstance, { setAccessToken } from '../../services/axiosInstace';
-import { initState, reducer } from './store/appReducer';
+import { initStateForReducer, reducer } from './store/appReducer';
 
 function App(): JSX.Element {
   // const [currentUser, setCurrentUser] = useState<User | undefined>({
@@ -16,7 +16,7 @@ function App(): JSX.Element {
   //   colorID: 1,
   // });
 
-  const [state, dispatch] = useReducer(reducer, initState);
+  const [state, dispatch] = useReducer(reducer, initStateForReducer);
 
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 

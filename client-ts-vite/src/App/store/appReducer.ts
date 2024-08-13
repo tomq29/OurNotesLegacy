@@ -5,7 +5,7 @@ export type InitStateType = {
   oneNote: NoteWithTexts;
 };
 
-export const initState: InitStateType = {
+export const initStateForReducer: InitStateType = {
   notes: [],
   oneNote: {
     id: 0,
