@@ -29,7 +29,6 @@ class NoteApi {
   static updateNote = async (note: Note): Promise<number> => {
     const { data } = await axiosInstance.put<{
       updateStatus: number;
-      id: number;
     }>(`/notes/note/${note.id}`, note);
 
     return data.updateStatus;
@@ -38,7 +37,6 @@ class NoteApi {
   static deteleNote = async (id: number): Promise<number> => {
     const { data } = await axiosInstance.delete<{
       countDeletedNotes: number;
-      id: number;
     }>(`/notes/note/${id}`);
     return data.countDeletedNotes;
   };

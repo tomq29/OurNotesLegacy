@@ -13,13 +13,13 @@ authRouter.post('/reg', async (req, res) => {
     const { login, email, password, colorID } = req.body;
 
     if (login.trim() === '' || email.trim() === '' || password.trim() === '') {
-      return res.status(400).json({ message: 'incorrect values' });
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
     const userInDB = await User.findOne({ where: { email } });
 
     if (userInDB) {
-      return res.status(400).json({ message: 'email is already used' });
+      return res.status(400).json({ message: 'Email is already in use' });
     }
 
     const user = (
@@ -27,7 +27,7 @@ authRouter.post('/reg', async (req, res) => {
         login,
         email,
         password: await bcrypt.hash(password, 10),
-        colorID
+        colorID,
       })
     ).get();
 
@@ -41,8 +41,8 @@ authRouter.post('/reg', async (req, res) => {
         maxAge: jwtConfig.refresh.expiresIn,
       })
       .json({ message: 'you redigstred!', user, accessToken });
-  } catch ({ message }) {
-    res.status(500).json({ message });
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'Internal server error' });
   }
 });
 
@@ -51,16 +51,23 @@ authRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (email.trim() === '' || password.trim() === '') {
-      return res.status(400).json({ message: 'incorrect values' });
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const user = (await User.findOne({ where: { email } })).get();
+    const userInDB = await User.findOne({ where: { email } });
 
+    if (!userInDB) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+  
+    const user = userInDB.get()
+ 
+    
     const passDB = user.password;
     const isValid = await bcrypt.compare(password, passDB);
 
     if (!isValid) {
-      return res.status(400).json({ message: 'incorrect password' });
+      return res.status(400).json({ message: 'Incorrect password' });
     }
 
     delete user.password;
@@ -73,8 +80,8 @@ authRouter.post('/login', async (req, res) => {
         maxAge: jwtConfig.refresh.expiresIn,
       })
       .json({ message: 'you loggin', user, accessToken });
-  } catch ({ message }) {
-    res.status(500).json({ message });
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'Internal server error' });
   }
 });
 
@@ -82,9 +89,12 @@ authRouter.delete('/logout', async (req, res) => {
   try {
     res
       .clearCookie(jwtConfig.refresh.type)
-      .json({ accessToken: '', message: 'You logouted! Bye!' });
-  } catch ({ message }) {
-    res.status(500).json({ message });
+      .json({
+        accessToken: '',
+        message: 'You have logged out successfully! Bye!',
+      });
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'Internal server error' });
   }
 });
 

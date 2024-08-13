@@ -53,12 +53,12 @@ textRouter
 
       const { body, noteID, userID } = req.body;
 
-      const data = await Text.update(
+      const [updateStatus] = await Text.update(
         { body, noteID, userID },
         { where: { id } }
       );
 
-      res.json(data);
+      res.json({ updateStatus, id });
     } catch ({ message }) {
       res.status(500).json({ err: message });
     }
@@ -72,7 +72,7 @@ textRouter
 
       const countDeletedNotes = await Text.destroy({ where: { id } });
 
-      res.json({ countDeletedNotes });
+      res.json({ countDeletedNotes, id });
     } catch ({ message }) {
       res.status(500).json({ err: message });
     }

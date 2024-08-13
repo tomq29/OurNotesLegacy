@@ -7,3 +7,5 @@ export type Text = {
   userID: UserID;
   noteID: NoteID;
 };
+
+export type TextWithoutID = Omit<Text, 'id'>
