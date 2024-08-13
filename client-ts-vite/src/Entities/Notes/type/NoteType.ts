@@ -5,8 +5,8 @@ import { UserID } from '../../User/type/UserType';
 export type Note = {
   id: number;
   title: string;
-  description: string;
-  folderID: FolderID;
+  description?: string;
+  folderID?: FolderID;
   userID: UserID;
 };
 

@@ -15,7 +15,7 @@ function NotesPage(): JSX.Element {
     NoteApi.getAllNotes()
       .then((data) => {
         dispatch({ type: 'getAll', payload: data });
-        // setNotes(data);
+
         setLoading(false);
       })
       .catch(console.log);

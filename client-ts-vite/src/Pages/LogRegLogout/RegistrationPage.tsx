@@ -11,17 +11,20 @@ const schema = yup
     email: yup.string().email('Введите email').required('Введите email'),
     login: yup.string().required('Введите login'),
     password: yup.string().required('Введите пароль'),
-    confirm: yup.string().required('Потвердите пароль'),
+    confirm: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Пароли должны совпадать')
+      .required('Потвердите пароль'),
+    colorID: yup.string().required('Выберите цвет'),
   })
   .required();
 
-
-  type logEmailPassType = {
-    login: string;
-    email: string;
-    password: string;
-    confirm: string;
-  };
+type logEmailPassType = {
+  login: string;
+  email: string;
+  password: string;
+  confirm: string;
+};
 
 function RegistrationPage(): JSX.Element {
   const { setCurrentUser } = useContext(AppContext);
@@ -35,22 +38,19 @@ function RegistrationPage(): JSX.Element {
     resolver: yupResolver(schema),
   });
 
-
   const navigate = useNavigate();
 
-  const registrationUser = (logEmailPass:logEmailPassType) => {
+  const registrationUser = (logEmailPass: logEmailPassType) => {
     if (logEmailPass.confirm === logEmailPass.password) {
       axiosInstance
-      .post('/auth/reg', logEmailPass)
-      .then(({ data }) => {
-        setAccessToken(data.accessToken);
-        setCurrentUser(data.user);
-        console.log(data.message);
-        navigate('/');
-      })
-      .catch(console.log);
-
-      
+        .post('/auth/reg', logEmailPass)
+        .then(({ data }) => {
+          setAccessToken(data.accessToken);
+          setCurrentUser(data.user);
+          console.log(data.message);
+          navigate('/');
+        })
+        .catch(console.log);
     }
   };
 
@@ -62,8 +62,7 @@ function RegistrationPage(): JSX.Element {
           <input
             type="text"
             {...register('login')}
-            
-            className="form-control mb-3"
+            className={`form-control mb-3 ${errors.login ? 'is-invalid' : ''}`}
             placeholder="Login"
           />
           <p className="text-danger  text-center mt-3">
@@ -72,7 +71,7 @@ function RegistrationPage(): JSX.Element {
           <input
             type="email"
             {...register('email')}
-            className="form-control mb-3"
+            className={`form-control mb-3 ${errors.email ? 'is-invalid' : ''}`}
             placeholder="Email"
           />
           <p className="text-danger  text-center mt-3">
@@ -81,7 +80,7 @@ function RegistrationPage(): JSX.Element {
           <input
             type="password"
             {...register('password')}
-            className="form-control mb-3"
+            className={`form-control mb-3 ${errors.password ? 'is-invalid' : ''}`}
             placeholder="Пароль"
           />
           <p className="text-danger  text-center mt-3">
@@ -90,11 +89,25 @@ function RegistrationPage(): JSX.Element {
           <input
             type="password"
             {...register('confirm')}
-            className="form-control mb-3"
+            className={`form-control mb-3 ${errors.confirm ? 'is-invalid' : ''}`}
             placeholder="Подтвердите пароль"
           />
           <p className="text-danger  text-center mt-3">
             {errors.confirm?.message}
+          </p>
+          <select
+            {...register('colorID')}
+            className={`form-control mb-3 ${
+              errors.colorID ? 'is-invalid' : ''
+            }`}
+          >
+            <option value="">Выберите цвет</option>
+            <option value={1}>Красный</option>
+            <option value={2}>Зелёный</option>
+            <option value={3}>Синий</option>
+          </select>
+          <p className="text-danger text-center mt-3">
+            {errors.colorID?.message}
           </p>
           <button type="submit" className="btn btn-outline-success">
             Зарегистрироваться

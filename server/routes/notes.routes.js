@@ -29,7 +29,7 @@ notesRouter
     try {
       const { title, description, userID, folderID } = req.body;
 
-      if (title.trim() === '' || description.trim() === '' || !userID) {
+      if (title.trim() === '' || !userID) {
         return res.status(400).json('Empty field exists');
       }
 

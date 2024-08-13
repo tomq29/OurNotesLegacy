@@ -5,10 +5,24 @@ import { useNavigate } from 'react-router-dom';
 import NoteApi from '../api/noteApi';
 import { AppContext } from '../../../App/providers/context/contextProvider';
 
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
 type NoteCardProps = {
   key: NoteID;
   note: Note;
 };
+
+const schema = yup
+  .object({
+    id: yup.number().required(),
+    title: yup.string().required(),
+    description: yup.string(),
+    userID: yup.number().required(),
+    folderID: yup.number().nullable(),
+  })
+  .required();
 
 function NoteCard({ note }: NoteCardProps): JSX.Element {
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -17,22 +31,39 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
 
   const { dispatch } = useContext(AppContext);
 
-  const [newNote, setNewNote] = useState<Note>({
-    id: note.id,
-    description: note.description,
-    title: note.title,
-    folderID: note.folderID,
-    userID: note.userID,
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
+    defaultValues: {
+      id: note.id,
+      title: note.title,
+      description: note.description,
+      userID: note.userID,
+      folderID: note.folderID,
+    },
   });
 
   const navigate = useNavigate();
 
-  async function editNote() {
+  async function editButtonHadler() {
+    const isValidForm = await trigger();
+
+    if (isValidForm) {
+      handleSubmit(editNote)();
+    }
+  }
+
+  async function editNote(editedNote: Note) {
     try {
-      const data = await NoteApi.updateNote(newNote);
+      const data = await NoteApi.updateNote(editedNote);
 
       if (data) {
-        dispatch({ type: 'update', payload: newNote });
+        dispatch({ type: 'update', payload: editedNote });
       }
 
       setEditMode((prev) => !prev);
@@ -70,20 +101,17 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
               className="card-title h6 form-control"
               type="text"
               defaultValue={note.title}
-              onChange={({ target }) =>
-                setNewNote((prev) => ({ ...prev, title: target.value }))
-              }
+              {...register('title')}
             />
-
+            <p className="text-danger">{errors.title?.message}</p>
             <p className="card-text"></p>
             <textarea
               className="card-text form-control p "
               defaultValue={note.description}
               rows={3}
-              onChange={({ target }) =>
-                setNewNote((prev) => ({ ...prev, description: target.value }))
-              }
+              {...register('description')}
             />
+            <p className="text-danger">{errors.description?.message}</p>
           </>
         )}
 
@@ -126,7 +154,10 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
 
         {editMode && (
           <>
-            <button className="btn btn-success round m-1" onClick={editNote}>
+            <button
+              className="btn btn-success round m-1"
+              onClick={editButtonHadler}
+            >
               Изменить
             </button>
 

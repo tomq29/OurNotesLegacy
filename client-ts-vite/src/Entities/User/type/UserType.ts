@@ -4,7 +4,7 @@ export type User = {
   id: number;
   login: string;
   email: string;
-  colorID: ColorID;
+  colorID?: ColorID;
 };
 
 export type UserID = User['id'];
