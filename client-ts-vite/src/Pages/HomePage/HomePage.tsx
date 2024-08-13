@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../../App/providers/contextProvider';
+import { AppContext } from '../../App/providers/context/contextProvider';
+
 
 function HomePage(): JSX.Element {
   const navigate = useNavigate();

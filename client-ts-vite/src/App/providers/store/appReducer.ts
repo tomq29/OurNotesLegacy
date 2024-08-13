@@ -1,4 +1,5 @@
-import { Note, NoteWithTexts } from '../../Entities/Notes/type/NoteType';
+import { Note, NoteWithTexts } from '../../../Entities/Notes/type/NoteType';
+import { ActionType } from '../../types/actionType';
 
 export type InitStateType = {
   notes: Note[];
@@ -16,13 +17,6 @@ export const initStateForReducer: InitStateType = {
     Texts: [],
   },
 };
-
-export type ActionType =
-  | { type: 'addNew'; payload: Note }
-  | { type: 'delete'; payload: number }
-  | { type: 'getAll'; payload: Note[] }
-  | { type: 'getOne'; payload: NoteWithTexts }
-  | { type: 'update'; payload: Note };
 
 export function reducer(
   state: InitStateType,

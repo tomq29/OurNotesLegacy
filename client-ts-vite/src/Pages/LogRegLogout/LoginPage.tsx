@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
-import { AppContext } from '../../App/providers/contextProvider';
+import { AppContext } from '../../App/providers/context/contextProvider';
 
 function LoginPage(): JSX.Element {
   const [email, setEmail] = useState('');

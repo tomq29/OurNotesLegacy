@@ -1,12 +1,12 @@
 import { createContext, Dispatch } from 'react';
-import { Note, NoteWithTexts } from '../../Entities/Notes/type/NoteType';
-import { Text } from '../../Entities/Texts/type/TextType';
-import { User } from '../../Entities/User/type/UserType';
-import {
-  ActionType,
-  initStateForReducer,
-  InitStateType,
-} from '../store/appReducer';
+
+import { ActionType } from '../../types/actionType';
+import { Note, NoteWithTexts } from '../../../Entities/Notes/type/NoteType';
+import { User } from '../../../Entities/User/type/UserType';
+import { initStateForReducer, InitStateType } from '../store/appReducer';
+import { Text } from '../../../Entities/Texts/type/TextType';
+
+
 
 type stateContext = {
   notes: Note[];

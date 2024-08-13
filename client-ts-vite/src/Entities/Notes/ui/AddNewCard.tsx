@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { NoteWithoutIDandFolderID } from '../type/NoteType';
-import { AppContext } from '../../../App/providers/contextProvider';
 
 import NoteApi from '../api/noteApi';
+import { AppContext } from '../../../App/providers/context/contextProvider';
 
 function AddNewCard(): JSX.Element {
-  const { setAddMode, currentUser, dispatch } =
-    useContext(AppContext);
+  const { setAddMode, currentUser, dispatch } = useContext(AppContext);
 
   const [newNote, setNewNote] = useState<NoteWithoutIDandFolderID>({
     description: '',

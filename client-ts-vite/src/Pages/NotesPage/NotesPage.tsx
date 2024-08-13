@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 
 import NoteApi from '../../Entities/Notes/api/noteApi';
 import NoteCard from '../../Entities/Notes/ui/NoteCard';
-import { AppContext } from '../../App/providers/contextProvider';
+import { AppContext } from '../../App/providers/context/contextProvider';
 
 import AddNewCard from '../../Entities/Notes/ui/AddNewCard';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';

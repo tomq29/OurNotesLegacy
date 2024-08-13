@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Text } from '../type/TextType';
-import { AppContext } from '../../../App/providers/contextProvider';
+import { AppContext } from '../../../App/providers/context/contextProvider';
+
 
 const getBackgroundColor = (userId: number): string => {
   switch (userId) {

@@ -1,12 +1,14 @@
 import { useEffect, useReducer, useState } from 'react';
-import AppRouter from './router/AppRouter';
+import AppRouter from './providers/router/AppRouter';
 import { User } from '../Entities/User/type/UserType';
 import NavBar from '../Widgets/NavBar/NavBar';
-import { AppContext } from './providers/contextProvider';
+
 import { Text } from '../Entities/Texts/type/TextType';
 import { Note, NoteWithTexts } from '../Entities/Notes/type/NoteType';
 import axiosInstance, { setAccessToken } from '../../services/axiosInstace';
-import { initStateForReducer, reducer } from './store/appReducer';
+import { initStateForReducer, reducer } from './providers/store/appReducer';
+import { AppContext } from './providers/context/contextProvider';
+
 
 function App(): JSX.Element {
   // const [currentUser, setCurrentUser] = useState<User | undefined>({

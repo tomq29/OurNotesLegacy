@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 
 import { NavLink } from 'react-router-dom';
-import { AppContext } from '../../App/providers/contextProvider';
+import { AppContext } from '../../App/providers/context/contextProvider';
+
 
 function NavBar(): JSX.Element {
   const { currentUser } = useContext(AppContext);

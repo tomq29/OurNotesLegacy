@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { AppContext } from '../../App/providers/contextProvider';
+import { AppContext } from '../../App/providers/context/contextProvider';
 import NoteApi from '../../Entities/Notes/api/noteApi';
 import TextBlock from '../../Entities/Texts/ui/TextBlock';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';
