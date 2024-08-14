@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { Text } from '../type/TextType';
 import { AppContext } from '../../../App/providers/context/contextProvider';
 
-
 const getBackgroundColor = (userId: number): string => {
   switch (userId) {
     case 1:
@@ -29,8 +28,7 @@ const getName = (userId: number): string => {
   }
 };
 
-
-function TextBlock({ text }: { text: Text }): JSX.Element {
+function MyTextBlock({ text }: { text: Text }): JSX.Element {
   const { currentUser } = useContext(AppContext);
 
   const [currentText, setCurrentText] = useState('');
@@ -49,15 +47,21 @@ function TextBlock({ text }: { text: Text }): JSX.Element {
       className="m-3 rounded "
       style={{ background: backgroundColor, padding: '0.6%' }}
     >
-      {/* <div contentEditable onInput={edit} style={{ padding: '1%' }}>
-        {text.body}
-      </div> */}
+      <textarea
+        defaultValue={text.body}
+        style={{
+          width: '100%',
 
+          backgroundColor: backgroundColor,
+          padding: '10px',
+          borderRadius: '8px',
+          border: '1px solid #ddd',
 
+          resize: 'none',
 
-      <div style={{ padding: '1%' }}>
-        {text.body}
-      </div>
+          outline: 'none',
+        }}
+      />
 
       <div className="text-end">
         <small>Written by: {name}</small>
@@ -66,4 +70,4 @@ function TextBlock({ text }: { text: Text }): JSX.Element {
   );
 }
 
-export default TextBlock;
+export default MyTextBlock;
