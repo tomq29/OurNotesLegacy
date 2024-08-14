@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Text } from '../type/TextType';
 import { AppContext } from '../../../App/providers/context/contextProvider';
 
@@ -29,18 +29,10 @@ const getName = (userId: number): string => {
 };
 
 function MyTextBlock({ text }: { text: Text }): JSX.Element {
-  const { currentUser } = useContext(AppContext);
-
-  const [currentText, setCurrentText] = useState('');
+  // const { currentUser } = useContext(AppContext);
 
   const backgroundColor = getBackgroundColor(text.userID);
   const name = getName(text.userID);
-
-  function edit(event: React.FormEvent<HTMLFormElement>) {
-    if (currentUser?.id === text.userID) {
-      setCurrentText(event.target.innerText);
-    }
-  }
 
   return (
     <div

@@ -1,7 +1,4 @@
-import React, { useContext, useState } from 'react';
 import { Text } from '../type/TextType';
-import { AppContext } from '../../../App/providers/context/contextProvider';
-
 
 const getBackgroundColor = (userId: number): string => {
   switch (userId) {
@@ -29,35 +26,16 @@ const getName = (userId: number): string => {
   }
 };
 
-
 function TextBlock({ text }: { text: Text }): JSX.Element {
-  const { currentUser } = useContext(AppContext);
-
-  const [currentText, setCurrentText] = useState('');
-
   const backgroundColor = getBackgroundColor(text.userID);
   const name = getName(text.userID);
-
-  function edit(event: React.FormEvent<HTMLFormElement>) {
-    if (currentUser?.id === text.userID) {
-      setCurrentText(event.target.innerText);
-    }
-  }
 
   return (
     <div
       className="m-3 rounded "
       style={{ background: backgroundColor, padding: '0.6%' }}
     >
-      {/* <div contentEditable onInput={edit} style={{ padding: '1%' }}>
-        {text.body}
-      </div> */}
-
-
-
-      <div style={{ padding: '1%' }}>
-        {text.body}
-      </div>
+      <div style={{ padding: '1%' }}>{text.body}</div>
 
       <div className="text-end">
         <small>Written by: {name}</small>
