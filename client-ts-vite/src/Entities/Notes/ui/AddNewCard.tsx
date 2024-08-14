@@ -6,6 +6,8 @@ import { AppContext } from '../../../App/providers/context/contextProvider';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useAppDispatch } from '../../../App/providers/store/store';
+import { createlNote } from '../model/NotesSlice';
 
 const schema = yup
   .object({
@@ -19,7 +21,10 @@ const schema = yup
   .required();
 
 function AddNewCard(): JSX.Element {
-  const { setAddMode, currentUser, dispatch } = useContext(AppContext);
+  const { setAddMode, currentUser } = useContext(AppContext);
+
+
+const dispatch = useAppDispatch()
 
   const {
     register,
@@ -33,9 +38,7 @@ function AddNewCard(): JSX.Element {
 
   async function addNewNote(newNote: NoteWithoutIDandFolderID): Promise<void> {
     try {
-      const data = await NoteApi.createNote(newNote);
-
-      dispatch({ type: 'addNew', payload: data });
+      dispatch(createlNote(newNote))
       setAddMode((prev) => !prev);
     } catch (error) {
       console.error(error);

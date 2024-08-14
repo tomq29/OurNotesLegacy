@@ -8,6 +8,16 @@ import {
 
 import axiosInstance from '../../../../services/axiosInstace';
 
+type updateNote = {
+  updateStatus: number;
+  id: number;
+};
+
+type deteleNote = {
+  countDeletedNotes: number;
+  id: number;
+};
+
 class NoteApi {
   static getAllNotes = async (): Promise<Note[]> => {
     const { data }: AxiosResponse<Note[]> = await axiosInstance.get('/notes');
@@ -26,19 +36,21 @@ class NoteApi {
     return data;
   };
 
-  static updateNote = async (note: Note): Promise<number> => {
-    const { data } = await axiosInstance.put<{
-      updateStatus: number;
-    }>(`/notes/note/${note.id}`, note);
+  static updateNote = async (note: Note): Promise<updateNote> => {
+    const { data } = await axiosInstance.put<updateNote>(
+      `/notes/note/${note.id}`,
+      note
+    );
 
-    return data.updateStatus;
+    return data;
   };
 
-  static deteleNote = async (id: number): Promise<number> => {
-    const { data } = await axiosInstance.delete<{
-      countDeletedNotes: number;
-    }>(`/notes/note/${id}`);
-    return data.countDeletedNotes;
+  static deteleNote = async (id: number): Promise<deteleNote> => {
+    const { data } = await axiosInstance.delete<deteleNote>(
+      `/notes/note/${id}`
+    );
+
+    return data;
   };
 }
 

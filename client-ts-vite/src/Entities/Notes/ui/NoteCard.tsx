@@ -8,6 +8,8 @@ import { AppContext } from '../../../App/providers/context/contextProvider';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useAppDispatch } from '../../../App/providers/store/store';
+import { deleteNote, updateNote } from '../model/NotesSlice';
 
 type NoteCardProps = {
   key: NoteID;
@@ -29,7 +31,7 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
   const [deleteMode, setDeleteMode] = useState<boolean>(false);
   const [normalMode, setNormalMode] = useState<boolean>(true);
 
-  const { dispatch } = useContext(AppContext);
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -60,11 +62,7 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
 
   async function editNote(editedNote: Note) {
     try {
-      const data = await NoteApi.updateNote(editedNote);
-
-      if (data) {
-        dispatch({ type: 'update', payload: editedNote });
-      }
+      dispatch(updateNote(editedNote));
 
       setEditMode((prev) => !prev);
       setNormalMode((prev) => !prev);
@@ -73,16 +71,8 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
     }
   }
 
-  async function deleteNote() {
-    try {
-      const data = await NoteApi.deteleNote(note.id);
-
-      if (data) {
-        dispatch({ type: 'delete', payload: note.id });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  function deleteButtonHandler() {
+    dispatch(deleteNote(note.id));
   }
 
   return (
@@ -175,7 +165,10 @@ function NoteCard({ note }: NoteCardProps): JSX.Element {
 
         {deleteMode && (
           <>
-            <button className="btn btn-danger round m-1" onClick={deleteNote}>
+            <button
+              className="btn btn-danger round m-1"
+              onClick={deleteButtonHandler}
+            >
               Удалить
             </button>
 

@@ -56,7 +56,7 @@ notesRouter
         { where: { id } }
       );
 
-      res.json({ updateStatus, id });
+      res.json({ updateStatus, id: Number(id) });
     } catch ({ message }) {
       res.status(500).json({ err: message });
     }
@@ -68,7 +68,7 @@ notesRouter
 
       const countDeletedNotes = await Note.destroy({ where: { id } });
 
-      res.json({ countDeletedNotes, id });
+      res.json({ countDeletedNotes, id: Number(id) });
     } catch ({ message }) {
       res.status(500).json({ err: message });
     }

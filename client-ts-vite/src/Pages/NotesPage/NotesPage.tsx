@@ -6,20 +6,25 @@ import { AppContext } from '../../App/providers/context/contextProvider';
 
 import AddNewCard from '../../Entities/Notes/ui/AddNewCard';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';
+import store, {
+  useAppDispatch,
+  useAppSelector,
+} from '../../App/providers/store/store';
+import { getAllNotes } from '../../Entities/Notes/model/NotesSlice';
 
 function NotesPage(): JSX.Element {
-  const { addMode, setAddMode, loading, setLoading, state, dispatch } =
-    useContext(AppContext);
+  const { addMode, setAddMode, loading, setLoading } = useContext(AppContext);
+
+  const dispatch = useAppDispatch();
+
+  const notes = useAppSelector((state) => state.notes);
 
   useEffect(() => {
-    NoteApi.getAllNotes()
-      .then((data) => {
-        dispatch({ type: 'getAll', payload: data });
-
+    dispatch(getAllNotes())
+      .then(() => {
         setLoading(false);
       })
       .catch(console.log);
-
     return setLoading(true);
   }, []);
 
@@ -47,7 +52,7 @@ function NotesPage(): JSX.Element {
       )}
 
       <div className="container d-flex flex-wrap">
-        {state.notes.map((note) => (
+        {notes.map((note) => (
           <NoteCard key={note.id} note={note} />
         ))}
       </div>
