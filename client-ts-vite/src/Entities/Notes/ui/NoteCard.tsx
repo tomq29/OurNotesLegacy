@@ -1,10 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Note, NoteID } from '../type/NoteType';
 import { useNavigate } from 'react-router-dom';
-
-import NoteApi from '../api/noteApi';
-import { AppContext } from '../../../App/providers/context/contextProvider';
-
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -27,6 +23,8 @@ const schema = yup
   .required();
 
 function NoteCard({ note }: NoteCardProps): JSX.Element {
+
+  
   const [editMode, setEditMode] = useState<boolean>(false);
   const [deleteMode, setDeleteMode] = useState<boolean>(false);
   const [normalMode, setNormalMode] = useState<boolean>(true);

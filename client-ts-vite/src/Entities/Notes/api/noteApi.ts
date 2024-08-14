@@ -28,6 +28,7 @@ class NoteApi {
     const { data }: AxiosResponse<NoteWithTexts> = await axiosInstance.get(
       `/notes/note/${id}`
     );
+
     return data;
   };
 

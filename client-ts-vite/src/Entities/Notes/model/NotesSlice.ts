@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Note, NoteWithoutIDandFolderID } from '../type/NoteType';
+import { Note, NoteID, NoteWithoutIDandFolderID } from '../type/NoteType';
 import NoteApi from '../api/noteApi';
 
 const initialState: Note[] = [];
@@ -11,7 +11,7 @@ export const createlNote = createAsyncThunk(
   'notes/createNote',
   (note: NoteWithoutIDandFolderID) => NoteApi.createNote(note)
 );
-export const deleteNote = createAsyncThunk('notes/deleteNote', (id: number) =>
+export const deleteNote = createAsyncThunk('notes/deleteNote', (id: NoteID) =>
   NoteApi.deteleNote(id)
 );
 export const updateNote = createAsyncThunk('notes/updateNote', (note: Note) =>
