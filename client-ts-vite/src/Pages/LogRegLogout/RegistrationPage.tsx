@@ -5,6 +5,7 @@ import { AppContext } from '../../App/providers/context/contextProvider';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { logEmailPassType } from '../../Entities/User/type/AuthTypes';
 
 const schema = yup
   .object({
@@ -19,12 +20,7 @@ const schema = yup
   })
   .required();
 
-type logEmailPassType = {
-  login: string;
-  email: string;
-  password: string;
-  confirm: string;
-};
+
 
 function RegistrationPage(): JSX.Element {
   const { setCurrentUser } = useContext(AppContext);

@@ -5,6 +5,7 @@ import { AppContext } from '../../App/providers/context/contextProvider';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { loginPassType } from '../../Entities/User/type/AuthTypes';
 
 const schema = yup
   .object({
@@ -13,10 +14,7 @@ const schema = yup
   })
   .required();
 
-type loginPassType = {
-  email: string;
-  password: string;
-};
+
 
 function LoginPage(): JSX.Element {
   const [serverError, setServerError] = useState<string | null>(null);
