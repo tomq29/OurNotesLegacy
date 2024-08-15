@@ -1,12 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, current } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import notesSlice from '../../../Entities/Notes/model/NotesSlice';
 import OneNote from '../../../Entities/Notes/model/OneNoteSlice';
+import CurrentUserSlice from '../../../Entities/User/model/CurrentUserSlice';
 
 const store = configureStore({
   reducer: {
     notes: notesSlice,
     oneNote: OneNote,
+    currentUser: CurrentUserSlice
   },
 });
 

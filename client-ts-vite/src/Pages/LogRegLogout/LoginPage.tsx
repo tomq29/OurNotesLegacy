@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { loginPassType } from '../../Entities/User/type/AuthTypes';
+import { useAppDispatch } from '../../App/providers/store/store';
+import { loginUser } from '../../Entities/User/model/CurrentUserSlice';
 
 const schema = yup
   .object({
@@ -27,6 +29,8 @@ function LoginPage(): JSX.Element {
     resolver: yupResolver(schema),
   });
 
+  const dispatch = useAppDispatch()
+  
   const { setCurrentUser } = useContext(AppContext);
 
   const navigate = useNavigate();
@@ -34,34 +38,38 @@ function LoginPage(): JSX.Element {
   const authorizationUser = async (loginPass: loginPassType) => {
     setServerError(null); // Reset server error before the request
 
-    axiosInstance
-      .post('/auth/login', loginPass)
-      .then(({ data }) => {
-        setAccessToken(data.accessToken);
-        setCurrentUser(data.user);
-        console.log(data.message);
-        navigate('/');
-      })
-      .catch((error) => {
-        if (error.response) {
-          const { status, data } = error.response;
 
-          if (status === 400) {
-            setServerError(data.message); // Set specific error message from the server
-          } else {
-            setServerError(
-              'An unexpected error occurred. Please try again later.'
-            );
-          }
-        } else if (error.request) {
-          setServerError(
-            'No response from the server. Please try again later.'
-          );
-        } else {
-          setServerError('Network error. Please check your connection.');
-        }
-        console.log(error.message);
-      });
+    dispatch(loginUser(loginPass))
+
+    // axiosInstance
+    //   .post('/auth/login', loginPass)
+    //   .then(({ data }) => {
+    //     setAccessToken(data.accessToken);
+    //     setCurrentUser(data.user);
+    //     console.log(data.message);
+    //     navigate('/');
+    //   })
+    //   .catch((error) => {
+    //     if (error.response) {
+    //       const { status, data } = error.response;
+
+    //       if (status === 400) {
+    //         setServerError(data.message); // Set specific error message from the server
+    //       } else {
+    //         setServerError(
+    //           'An unexpected error occurred. Please try again later.'
+    //         );
+    //       }
+    //     } else if (error.request) {
+    //       setServerError(
+    //         'No response from the server. Please try again later.'
+    //       );
+    //     } else {
+    //       setServerError('Network error. Please check your connection.');
+    //     }
+    //     console.log(error.message);
+    //   });
+
   };
 
   return (

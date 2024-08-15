@@ -23,7 +23,7 @@ class AuthApi {
     return data;
   };
 
-  static logout = axiosInstance.delete('/auth/logout');
+  static logout = () => axiosInstance.delete('/auth/logout');
 
   static refreshToken = async () => {
     const { data } = await axiosInstance.get<LogRegResponceType>(
