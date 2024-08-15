@@ -9,15 +9,7 @@ import axiosInstance, { setAccessToken } from '../../services/axiosInstace';
 import { initStateForReducer, reducer } from './providers/store/appReducer';
 import { AppContext } from './providers/context/contextProvider';
 
-
 function App(): JSX.Element {
-  // const [currentUser, setCurrentUser] = useState<User | undefined>({
-  //   id: 1,
-  //   login: 'tom',
-  //   email: 'tom@tom',
-  //   colorID: 1,
-  // });
-
   const [state, dispatch] = useReducer(reducer, initStateForReducer);
 
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
@@ -43,12 +35,12 @@ function App(): JSX.Element {
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    axiosInstance.get('/tokens/refresh').then(({ data }) => {
-      setAccessToken(data.accessToken);
-      setCurrentUser(data.user);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axiosInstance.get('/tokens/refresh').then(({ data }) => {
+  //     setAccessToken(data.accessToken);
+  //     setCurrentUser(data.user);
+  //   });
+  // }, []);
 
   return (
     <>

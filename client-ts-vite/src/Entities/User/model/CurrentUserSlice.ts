@@ -2,20 +2,42 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { User } from '../type/UserType';
 import AuthApi from '../api/AuthApi';
 import { logEmailPassType, loginPassType } from '../type/AuthTypes';
+import { AxiosError } from 'axios';
 
 export type userSliceType = {
   user: User | undefined;
   accessToken: string;
+  error: string | null;
 };
 
 const initialState: userSliceType = {
   user: undefined,
   accessToken: '',
+  error: null,
 };
 
 export const loginUser = createAsyncThunk(
   'user/login',
-  (loginPass: loginPassType) => AuthApi.login(loginPass)
+  async (loginPass: loginPassType, { rejectWithValue }) => {
+    try {
+      const response = await AuthApi.login(loginPass);
+      return response;
+    } catch (error: unknown) {
+
+
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          return rejectWithValue(error.response.data.message);
+        } else if (error.request) {
+          return rejectWithValue(
+            'No response from the server. Please try again later.'
+          );
+        }
+      }
+
+      return rejectWithValue('Network error. Please check your connection.');
+    }
+  }
 );
 
 export const regUser = createAsyncThunk(
@@ -34,10 +56,26 @@ export const refreshUser = createAsyncThunk('user/refresh', () =>
 const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState,
-  reducers: {},
+  reducers: {
+    setAccessToken: (state, action) => {
+      console.log(action);
+
+      state.accessToken = action.payload;
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(loginUser.fulfilled, (state, action) => action.payload);
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+      state.error = null;
+    });
+    builder.addCase(loginUser.rejected, (state, action) => {
+      state.error = action.payload as string;
+    });
   },
 });
-
+export const { setAccessToken, clearError } = currentUserSlice.actions;
 export default currentUserSlice.reducer;

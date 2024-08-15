@@ -8,7 +8,7 @@ const store = configureStore({
   reducer: {
     notes: notesSlice,
     oneNote: OneNote,
-    currentUser: CurrentUserSlice
+    currentUser: CurrentUserSlice,
   },
 });
 

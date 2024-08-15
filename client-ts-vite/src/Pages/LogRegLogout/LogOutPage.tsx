@@ -8,18 +8,18 @@ function LogOutPage(): JSX.Element {
 
   const navigate = useNavigate();
 
-  const logoutUser = () => {
-    axiosInstance
-      .delete('/auth/logout')
-      .then(({ data }) => {
-        setAccessToken(data.accessToken);
-        setCurrentUser(undefined);
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const logoutUser = () => {
+  //   axiosInstance
+  //     .delete('/auth/logout')
+  //     .then(({ data }) => {
+  //       setAccessToken(data.accessToken);
+  //       setCurrentUser(undefined);
+  //       navigate('/');
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   return (
     <>

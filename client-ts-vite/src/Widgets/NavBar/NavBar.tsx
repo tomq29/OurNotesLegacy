@@ -2,10 +2,13 @@ import { useContext } from 'react';
 
 import { NavLink } from 'react-router-dom';
 import { AppContext } from '../../App/providers/context/contextProvider';
+import { useAppSelector } from '../../App/providers/store/store';
 
 
 function NavBar(): JSX.Element {
-  const { currentUser } = useContext(AppContext);
+  // const { currentUser } = useContext(AppContext);
+
+  const currentUser = useAppSelector(state => state.currentUser.user)
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary mb-3">

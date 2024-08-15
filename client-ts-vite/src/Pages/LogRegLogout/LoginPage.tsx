@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
 import { AppContext } from '../../App/providers/context/contextProvider';
@@ -6,8 +6,14 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { loginPassType } from '../../Entities/User/type/AuthTypes';
-import { useAppDispatch } from '../../App/providers/store/store';
-import { loginUser } from '../../Entities/User/model/CurrentUserSlice';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../App/providers/store/store';
+import {
+  clearError,
+  loginUser,
+} from '../../Entities/User/model/CurrentUserSlice';
 
 const schema = yup
   .object({
@@ -15,8 +21,6 @@ const schema = yup
     password: yup.string().required('Введите пароль'),
   })
   .required();
-
-
 
 function LoginPage(): JSX.Element {
   const [serverError, setServerError] = useState<string | null>(null);
@@ -29,8 +33,17 @@ function LoginPage(): JSX.Element {
     resolver: yupResolver(schema),
   });
 
-  const dispatch = useAppDispatch()
-  
+  const dispatch = useAppDispatch();
+
+  const { error } = useAppSelector((state) => state.currentUser);
+
+  useEffect(() => {
+    if (error) {
+      setServerError(error);
+      dispatch(clearError()); // Clear the error after displaying it
+    }
+  }, [error, dispatch]);
+
   const { setCurrentUser } = useContext(AppContext);
 
   const navigate = useNavigate();
@@ -38,38 +51,15 @@ function LoginPage(): JSX.Element {
   const authorizationUser = async (loginPass: loginPassType) => {
     setServerError(null); // Reset server error before the request
 
+    dispatch(loginUser(loginPass)).then((action) => {
+      console.log(action);
 
-    dispatch(loginUser(loginPass))
+      console.log(loginUser.fulfilled.match(action));
 
-    // axiosInstance
-    //   .post('/auth/login', loginPass)
-    //   .then(({ data }) => {
-    //     setAccessToken(data.accessToken);
-    //     setCurrentUser(data.user);
-    //     console.log(data.message);
-    //     navigate('/');
-    //   })
-    //   .catch((error) => {
-    //     if (error.response) {
-    //       const { status, data } = error.response;
-
-    //       if (status === 400) {
-    //         setServerError(data.message); // Set specific error message from the server
-    //       } else {
-    //         setServerError(
-    //           'An unexpected error occurred. Please try again later.'
-    //         );
-    //       }
-    //     } else if (error.request) {
-    //       setServerError(
-    //         'No response from the server. Please try again later.'
-    //       );
-    //     } else {
-    //       setServerError('Network error. Please check your connection.');
-    //     }
-    //     console.log(error.message);
-    //   });
-
+      // if (loginUser.fulfilled.match(action)) {
+      //   navigate('/');
+      // }
+    });
   };
 
   return (

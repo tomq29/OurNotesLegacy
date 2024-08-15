@@ -1,9 +1,12 @@
-import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import {User} from '../src/Entities/User/type/UserType'
+import store from '../src/App/providers/store/store';
+import type {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from 'axios';
+import { User } from '../src/Entities/User/type/UserType';
 import axios from 'axios';
-
-
-
+import { setAccessToken } from '../src/Entities/User/model/CurrentUserSlice';
 
 type RetryConfig = {
   sent?: boolean;
@@ -24,19 +27,14 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
-let accessToken = '';
-
-export function setAccessToken(token:string):void {
-  accessToken = token;
-}
-
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    const accessToken = store.getState().currentUser.accessToken;
     if (!config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
-  },
+  }
 );
 
 axiosInstance.interceptors.response.use(
@@ -47,7 +45,9 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
     if (error?.response?.status === 403 && !prevRequest.sent) {
-      const response = await axios<TokensRefreshResponse>('/api/tokens/refresh');
+      const response = await axios<TokensRefreshResponse>(
+        '/api/tokens/refresh'
+      );
       const newAccessToken = response.data.accessToken;
       setAccessToken(newAccessToken);
       prevRequest.sent = true;
@@ -55,7 +55,7 @@ axiosInstance.interceptors.response.use(
       return axiosInstance(prevRequest);
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 export default axiosInstance;
