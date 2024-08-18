@@ -4,7 +4,7 @@ import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
 import { AppContext } from '../../App/providers/context/contextProvider';
 
 function LogOutPage(): JSX.Element {
-  const { currentUser, setCurrentUser } = useContext(AppContext);
+
 
   const navigate = useNavigate();
 

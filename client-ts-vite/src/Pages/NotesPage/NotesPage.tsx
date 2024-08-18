@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import NoteCard from '../../Entities/Notes/ui/NoteCard';
 import { AppContext } from '../../App/providers/context/contextProvider';
@@ -12,18 +12,22 @@ import {
 import { getAllNotes } from '../../Entities/Notes/model/NotesSlice';
 
 function NotesPage(): JSX.Element {
-  const { addMode, setAddMode, loading, setLoading } = useContext(AppContext);
+  const [addMode, setAddMode] = useState(false);
+  const { loading, setLoading } = useContext(AppContext);
 
   const dispatch = useAppDispatch();
 
-  const notes = useAppSelector((state) => state.notes);
+  const notes = useAppSelector((state) => state.notesStore);
 
   useEffect(() => {
-    dispatch(getAllNotes())
-      .then(() => {
-        setLoading(false);
-      })
-      .catch(console.log);
+    if (notes.length === 0) {
+      dispatch(getAllNotes())
+        .then(() => {
+          setLoading(false);
+        })
+        .catch(console.log);
+    }
+
     return setLoading(true);
   }, []);
 
@@ -34,7 +38,7 @@ function NotesPage(): JSX.Element {
     <div>
       {addMode ? (
         <>
-          <AddNewCard />
+          <AddNewCard setAddMode={setAddMode}  />
         </>
       ) : (
         <>

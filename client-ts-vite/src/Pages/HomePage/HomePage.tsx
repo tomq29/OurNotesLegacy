@@ -1,29 +1,21 @@
-import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../../App/providers/context/contextProvider';
 
+import { useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../App/providers/store/store';
 
 function HomePage(): JSX.Element {
   const navigate = useNavigate();
 
-  const { currentUser } = useContext(AppContext);
+
+
+  const  currentUser  = useAppSelector(state => state.currentUserStore.user)
 
   if (currentUser) {
     return <div>hello</div>;
   }
 
   return (
-    <div
-      className="container-fluid d-flex flex-column justify-content-center align-items-center"
-      // style={{
-      //   minHeight: '100vh',
-      //   backgroundColor: '#f4f4f4',
-      //   color: '#333',
-      //   textAlign: 'center',
-      //   padding: '2rem',
-      //   fontFamily: 'Arial, sans-serif',
-      // }}
-    >
+    <div className="container-fluid d-flex flex-column justify-content-center align-items-center">
       <header style={{ marginBottom: '2rem' }}>
         <h1 className="text-center">Заметки</h1>
         <h3 className="text-center" style={{ fontSize: '1rem', color: '#777' }}>

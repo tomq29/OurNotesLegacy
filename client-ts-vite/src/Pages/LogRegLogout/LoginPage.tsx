@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
-import { AppContext } from '../../App/providers/context/contextProvider';
+
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -35,7 +34,7 @@ function LoginPage(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const { error } = useAppSelector((state) => state.currentUser);
+  const { error } = useAppSelector((state) => state.currentUserStore);
 
   useEffect(() => {
     if (error) {
@@ -44,21 +43,15 @@ function LoginPage(): JSX.Element {
     }
   }, [error, dispatch]);
 
-  const { setCurrentUser } = useContext(AppContext);
-
   const navigate = useNavigate();
 
   const authorizationUser = async (loginPass: loginPassType) => {
     setServerError(null); // Reset server error before the request
 
     dispatch(loginUser(loginPass)).then((action) => {
-      console.log(action);
-
-      console.log(loginUser.fulfilled.match(action));
-
-      // if (loginUser.fulfilled.match(action)) {
-      //   navigate('/');
-      // }
+      if (loginUser.fulfilled.match(action)) {
+        navigate('/');
+      }
     });
   };
 

@@ -1,67 +1,27 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppRouter from './providers/router/AppRouter';
-import { User } from '../Entities/User/type/UserType';
+
 import NavBar from '../Widgets/NavBar/NavBar';
 
-import { Text } from '../Entities/Texts/type/TextType';
-import { Note, NoteWithTexts } from '../Entities/Notes/type/NoteType';
-import axiosInstance, { setAccessToken } from '../../services/axiosInstace';
-import { initStateForReducer, reducer } from './providers/store/appReducer';
 import { AppContext } from './providers/context/contextProvider';
+import { useAppDispatch } from './providers/store/store';
+import { refreshUser } from '../Entities/User/model/CurrentUserSlice';
 
 function App(): JSX.Element {
-  const [state, dispatch] = useReducer(reducer, initStateForReducer);
-
-  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
-
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [texts, setTexts] = useState<Text[]>([]);
-  const [oneNote, setOneNote] = useState<NoteWithTexts>({
-    id: 0,
-    description: '',
-    title: '',
-    folderID: null,
-    userID: 0,
-    Texts: [],
-  });
-  const [oneText, setOneText] = useState<Text>({
-    id: 0,
-    body: '',
-    userID: 0,
-    noteID: 0,
-  });
-
-  const [addMode, setAddMode] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   axiosInstance.get('/tokens/refresh').then(({ data }) => {
-  //     setAccessToken(data.accessToken);
-  //     setCurrentUser(data.user);
-  //   });
-  // }, []);
+  useEffect(() => {
+    dispatch(refreshUser()).catch(console.log);
+  }, []);
 
   return (
     <>
       <AppContext.Provider
         value={{
-          currentUser,
-          setCurrentUser,
-          notes,
-          setNotes,
-          texts,
-          setTexts,
-          oneNote,
-          setOneNote,
-          oneText,
-          setOneText,
-          addMode,
-          setAddMode,
           loading,
           setLoading,
-          state,
-          dispatch,
         }}
       >
         <NavBar />

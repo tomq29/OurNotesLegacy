@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AppContext } from '../../App/providers/context/contextProvider';
-import NoteApi from '../../Entities/Notes/api/noteApi';
+
 import TextBlock from '../../Entities/Texts/ui/TextBlock';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';
 import AddNewText from '../../Entities/Texts/ui/AddNewText';
@@ -15,11 +15,13 @@ import { getOneNote } from '../../Entities/Notes/model/OneNoteSlice';
 function OneNotePage(): JSX.Element {
   const { id } = useParams();
 
-  const { loading, setLoading, currentUser } = useContext(AppContext);
+  const currentUser = useAppSelector((state) => state.currentUserStore.user);
+
+  const { loading, setLoading } = useContext(AppContext);
 
   const dispatch = useAppDispatch();
 
-  const oneNote = useAppSelector((state) => state.oneNote);
+  const oneNote = useAppSelector((state) => state.oneNoteStore);
 
   useEffect(() => {
     dispatch(getOneNote(Number(id)))

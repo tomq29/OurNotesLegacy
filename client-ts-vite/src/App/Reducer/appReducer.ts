@@ -1,5 +1,5 @@
-import { Note, NoteWithTexts } from '../../../Entities/Notes/type/NoteType';
-import { ActionType } from '../../types/actionType';
+import { Note, NoteWithTexts } from '../../Entities/Notes/type/NoteType';
+import { ActionType } from './actionType';
 
 export type InitStateType = {
   notes: Note[];

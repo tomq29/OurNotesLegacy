@@ -23,8 +23,6 @@ export const loginUser = createAsyncThunk(
       const response = await AuthApi.login(loginPass);
       return response;
     } catch (error: unknown) {
-
-
       if (error instanceof AxiosError) {
         if (error.response) {
           return rejectWithValue(error.response.data.message);
@@ -58,8 +56,6 @@ const currentUserSlice = createSlice({
   initialState,
   reducers: {
     setAccessToken: (state, action) => {
-      console.log(action);
-
       state.accessToken = action.payload;
     },
     clearError: (state) => {
@@ -67,15 +63,21 @@ const currentUserSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
-      state.error = null;
-    });
-    builder.addCase(loginUser.rejected, (state, action) => {
-      state.error = action.payload as string;
-    });
+    builder
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.accessToken = action.payload.accessToken;
+        state.error = null;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.error = action.payload as string;
+      })
+      .addCase(refreshUser.fulfilled,(state, action)=>{
+        state.user = action.payload.user;
+        state.accessToken = action.payload.accessToken;
+      })
   },
 });
+
 export const { setAccessToken, clearError } = currentUserSlice.actions;
 export default currentUserSlice.reducer;

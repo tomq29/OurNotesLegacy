@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
-import { AppContext } from '../../App/providers/context/contextProvider';
+
+
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { logEmailPassType } from '../../Entities/User/type/AuthTypes';
+
 
 const schema = yup
   .object({
@@ -21,7 +21,7 @@ const schema = yup
   .required();
 
 function RegistrationPage(): JSX.Element {
-  const { setCurrentUser } = useContext(AppContext);
+
 
   const {
     register,
