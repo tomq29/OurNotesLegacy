@@ -40,7 +40,15 @@ export const loginUser = createAsyncThunk(
 
 export const regUser = createAsyncThunk(
   'user/reg',
-  (logEmailPass: logEmailPassType) => AuthApi.reg(logEmailPass)
+  async (logEmailPass: logEmailPassType, { rejectWithValue }) => {
+    try {
+      const response = await AuthApi.reg(logEmailPass);
+      return response;
+    } catch (error) {
+      
+      return rejectWithValue(error.response.data.message);
+    }
+  }
 );
 
 export const logoutUser = createAsyncThunk('user/logout', () =>
@@ -72,10 +80,21 @@ const currentUserSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.error = action.payload as string;
       })
-      .addCase(refreshUser.fulfilled,(state, action)=>{
+      .addCase(refreshUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
       })
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.accessToken = action.payload.accessToken;
+      })
+      .addCase(regUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.accessToken = action.payload.accessToken;
+      })
+      .addCase(regUser.rejected, (state, action) => {
+        state.error = action.payload;
+      });
   },
 });
 

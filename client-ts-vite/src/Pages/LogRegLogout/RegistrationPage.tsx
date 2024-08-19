@@ -1,11 +1,17 @@
-
 import { useNavigate } from 'react-router-dom';
-
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../App/providers/store/store';
+import { logEmailPassType } from '../../Entities/User/type/AuthTypes';
+import {
+  clearError,
+  regUser,
+} from '../../Entities/User/model/CurrentUserSlice';
 
 const schema = yup
   .object({
@@ -21,7 +27,9 @@ const schema = yup
   .required();
 
 function RegistrationPage(): JSX.Element {
+  const dispatch = useAppDispatch();
 
+  const error = useAppSelector((state) => state.currentUserStore.error);
 
   const {
     register,
@@ -34,19 +42,17 @@ function RegistrationPage(): JSX.Element {
 
   const navigate = useNavigate();
 
-  // const registrationUser = (logEmailPass: logEmailPassType) => {
-  //   if (logEmailPass.confirm === logEmailPass.password) {
-  //     axiosInstance
-  //       .post('/auth/reg', logEmailPass)
-  //       .then(({ data }) => {
-  //         setAccessToken(data.accessToken);
-  //         setCurrentUser(data.user);
-  //         console.log(data.message);
-  //         navigate('/');
-  //       })
-  //       .catch(console.log);
-  //   }
-  // };
+  const registrationUser = (logEmailPass: logEmailPassType) => {
+    if (logEmailPass.confirm === logEmailPass.password) {
+      dispatch(regUser(logEmailPass))
+        .then((action) => {
+          if (action.meta.requestStatus === 'fulfilled') {
+            navigate('/');
+          }
+        })
+        .catch(console.log);
+    }
+  };
 
   return (
     <>
@@ -64,6 +70,7 @@ function RegistrationPage(): JSX.Element {
           </p>
           <input
             type="email"
+            onClick={() => dispatch(clearError())}
             {...register('email')}
             className={`form-control mb-3 ${errors.email ? 'is-invalid' : ''}`}
             placeholder="Email"
@@ -111,6 +118,7 @@ function RegistrationPage(): JSX.Element {
             Зарегистрироваться
           </button>
         </form>
+        {error && <p className="text-danger  text-center mt-3">{error}</p>}
       </div>
     </>
   );

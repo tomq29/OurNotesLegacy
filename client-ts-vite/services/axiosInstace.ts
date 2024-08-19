@@ -22,9 +22,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: '/api',
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 axiosInstance.interceptors.request.use(

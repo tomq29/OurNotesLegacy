@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useForm } from 'react-hook-form';
@@ -22,7 +21,6 @@ const schema = yup
   .required();
 
 function LoginPage(): JSX.Element {
-  const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -34,25 +32,20 @@ function LoginPage(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const { error } = useAppSelector((state) => state.currentUserStore);
-
-  useEffect(() => {
-    if (error) {
-      setServerError(error);
-      dispatch(clearError()); // Clear the error after displaying it
-    }
-  }, [error, dispatch]);
+  const error = useAppSelector((state) => state.currentUserStore.error);
 
   const navigate = useNavigate();
 
   const authorizationUser = async (loginPass: loginPassType) => {
-    setServerError(null); // Reset server error before the request
+    dispatch(clearError());
 
-    dispatch(loginUser(loginPass)).then((action) => {
-      if (loginUser.fulfilled.match(action)) {
-        navigate('/');
-      }
-    });
+    dispatch(loginUser(loginPass))
+      .then((action) => {
+        if (action.meta.requestStatus === 'fulfilled') {
+          navigate('/');
+        }
+      })
+      .catch(console.log);
   };
 
   return (
@@ -82,9 +75,7 @@ function LoginPage(): JSX.Element {
             Войти
           </button>
 
-          {serverError && (
-            <p className="text-danger text-center mt-3">{serverError}</p>
-          )}
+          {error && <p className="text-danger text-center mt-3">{error}</p>}
         </form>
       </div>
     </>

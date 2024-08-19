@@ -1,32 +1,29 @@
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance, { setAccessToken } from '../../../services/axiosInstace';
-import { AppContext } from '../../App/providers/context/contextProvider';
+
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../App/providers/store/store';
+import { logoutUser } from '../../Entities/User/model/CurrentUserSlice';
 
 function LogOutPage(): JSX.Element {
-
-
+  const currentUser = useAppSelector((state) => state.currentUserStore.user);
   const navigate = useNavigate();
 
-  // const logoutUser = () => {
-  //   axiosInstance
-  //     .delete('/auth/logout')
-  //     .then(({ data }) => {
-  //       setAccessToken(data.accessToken);
-  //       setCurrentUser(undefined);
-  //       navigate('/');
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const dispatch = useAppDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logoutUser())
+      .then(() => navigate('/'))
+      .catch(console.log);
+  };
 
   return (
     <>
       <div className="vstack gap-2 col-md-5 mx-auto">
         <div> {currentUser?.login}, Вы точно хотите выйти?</div>
         <button
-          onClick={logoutUser}
+          onClick={logoutHandler}
           type="button"
           className="btn btn-outline-secondary"
         >

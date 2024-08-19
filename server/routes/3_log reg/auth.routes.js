@@ -90,6 +90,7 @@ authRouter.delete('/logout', async (req, res) => {
     res
       .clearCookie(jwtConfig.refresh.type)
       .json({
+        user:undefined,
         accessToken: '',
         message: 'You have logged out successfully! Bye!',
       });
