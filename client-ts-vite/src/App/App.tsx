@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import AppRouter from './providers/router/AppRouter';
 
 import NavBar from '../Widgets/NavBar/NavBar';
 
-import { AppContext } from './providers/context/contextProvider';
 import { useAppDispatch } from './providers/store/store';
 import { refreshUser } from '../Entities/User/model/CurrentUserSlice';
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
-
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     dispatch(refreshUser()).catch(console.log);
@@ -18,16 +15,9 @@ function App(): JSX.Element {
 
   return (
     <>
-      <AppContext.Provider
-        value={{
-          loading,
-          setLoading,
-        }}
-      >
-        <NavBar />
+      <NavBar />
 
-        <AppRouter />
-      </AppContext.Provider>
+      <AppRouter />
     </>
   );
 }

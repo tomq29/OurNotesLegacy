@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 
 import NoteCard from '../../Entities/Notes/ui/NoteCard';
-import { AppContext } from '../../App/providers/context/contextProvider';
+
 
 import AddNewCard from '../../Entities/Notes/ui/AddNewCard';
 import Spinner from '../../Shared/LoadingSpinner/Spinner';
@@ -13,22 +13,16 @@ import { getAllNotes } from '../../Entities/Notes/model/NotesSlice';
 
 function NotesPage(): JSX.Element {
   const [addMode, setAddMode] = useState(false);
-  const { loading, setLoading } = useContext(AppContext);
+ 
 
   const dispatch = useAppDispatch();
 
-  const notes = useAppSelector((state) => state.notesStore);
+  const { notes, loading } = useAppSelector((state) => state.notesStore);
 
   useEffect(() => {
     if (notes.length === 0) {
-      dispatch(getAllNotes())
-        .then(() => {
-          setLoading(false);
-        })
-        .catch(console.log);
+      dispatch(getAllNotes()).catch(console.log);
     }
-
-    return setLoading(true);
   }, []);
 
   if (loading) {
@@ -38,7 +32,7 @@ function NotesPage(): JSX.Element {
     <div>
       {addMode ? (
         <>
-          <AddNewCard setAddMode={setAddMode}  />
+          <AddNewCard setAddMode={setAddMode} />
         </>
       ) : (
         <>

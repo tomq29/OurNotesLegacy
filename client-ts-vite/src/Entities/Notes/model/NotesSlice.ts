@@ -2,7 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Note, NoteID, NoteWithoutIDandFolderID } from '../type/NoteType';
 import NoteApi from '../api/noteApi';
 
-const initialState: Note[] = [];
+type initialState = { notes: Note[]; loading: boolean };
+
+const initialState: initialState = { notes: [], loading: false };
 
 export const getAllNotes = createAsyncThunk('notes/getAll', () =>
   NoteApi.getAllNotes()
@@ -23,22 +25,30 @@ const notesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getAllNotes.pending, (state) => {
+      state.loading = true;
+    });
+
     builder.addCase(getAllNotes.fulfilled, (state, action) => {
-      state.push(...action.payload);
+      state.notes.push(...action.payload);
+      state.loading = false;
     });
 
     builder.addCase(createlNote.fulfilled, (state, action) => {
-      state.push(action.payload);
+      state.notes.push(action.payload);
+      state.loading = false;
     });
 
     builder.addCase(deleteNote.fulfilled, (state, action) => {
-      return state.filter((el) => el.id !== action.payload.id);
+      state.notes = state.notes.filter((el) => el.id !== action.payload.id);
+      state.loading = false;
     });
 
     builder.addCase(updateNote.fulfilled, (state, action) => {
-      return state.map((el) =>
+      state.notes = state.notes.map((el) =>
         el.id === action.payload.id ? action.meta.arg : el
       );
+      state.loading = false;
     });
   },
 });
